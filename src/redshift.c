@@ -70,6 +70,10 @@
 # include "gamma-vidmode.h"
 #endif
 
+#ifdef ENABLE_GNOMERR
+# include "gamma-gnomerr.h"
+#endif
+
 #ifdef ENABLE_QUARTZ
 # include "gamma-quartz.h"
 #endif
@@ -106,6 +110,9 @@ typedef union {
 #endif
 #ifdef ENABLE_VIDMODE
 	vidmode_state_t vidmode;
+#endif
+#ifdef ENABLE_GNOMERR
+	gnomerr_state_t gnomerr;
 #endif
 #ifdef ENABLE_QUARTZ
 	quartz_state_t quartz;
@@ -152,6 +159,18 @@ static const gamma_method_t gamma_methods[] = {
 		(gamma_method_set_option_func *)vidmode_set_option,
 		(gamma_method_restore_func *)vidmode_restore,
 		(gamma_method_set_temperature_func *)vidmode_set_temperature
+	},
+#endif
+#ifdef ENABLE_GNOMERR
+	{
+		"gnomerr", 1,
+		(gamma_method_init_func *)gnomerr_init,
+		(gamma_method_start_func *)gnomerr_start,
+		(gamma_method_free_func *)gnomerr_free,
+		(gamma_method_print_help_func *)gnomerr_print_help,
+		(gamma_method_set_option_func *)gnomerr_set_option,
+		(gamma_method_restore_func *)gnomerr_restore,
+		(gamma_method_set_temperature_func *)gnomerr_set_temperature
 	},
 #endif
 #ifdef ENABLE_QUARTZ

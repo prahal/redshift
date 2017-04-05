@@ -23,6 +23,7 @@ EXTRA_redshift_SOURCES = \
 	gamma-drm.c gamma-drm.h \
 	gamma-randr.c gamma-randr.h \
 	gamma-vidmode.c gamma-vidmode.h \
+	gamma-gnomerr.c gamma-gnomerr.h \
 	gamma-quartz.c gamma-quartz.h \
 	gamma-w32gdi.c gamma-w32gdi.h \
 	location-geoclue.c location-geoclue.h
@@ -52,6 +53,14 @@ AM_CFLAGS += $(X11_CFLAGS) $(XF86VM_CFLAGS)
 redshift_LDADD += \
 	$(X11_LIBS) $(X11_CFLAGS) \
 	$(XF86VM_LIBS) $(XF86VM_CFLAGS)
+endif
+
+if ENABLE_GNOMERR
+redshift_SOURCES += gamma-gnomerr.c gamma-gnomerr.h
+AM_CFLAGS += $(GLIB_CFLAGS) $(GNOMEDESKTOP3_CFLAGS)
+redshift_LDADD += \
+	$(GLIB_LIBS) $(GLIB_CFLAGS) \
+	$(GNOMEDESKTOP3_LIBS) $(GNOMEDESKTOP3_CFLAGS)
 endif
 
 if ENABLE_QUARTZ

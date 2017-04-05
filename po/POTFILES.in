@@ -11,6 +11,7 @@ src/config-ini.c
 src/gamma-drm.c
 src/gamma-randr.c
 src/gamma-vidmode.c
+src/gamma-gnomerr.c
 src/gamma-quartz.c
 src/gamma-w32gdi.c
 src/gamma-dummy.c
