@@ -67,6 +67,8 @@ PKG_CHECK_MODULES([XF86VM], [xxf86vm], [have_xf86vm=yes], [have_xf86vm=no])
 PKG_CHECK_MODULES([XCB], [xcb], [have_xcb=yes], [have_xcb=no])
 PKG_CHECK_MODULES([XCB_RANDR], [xcb-randr],
 	[have_xcb_randr=yes], [have_xcb_randr=no])
+PKG_CHECK_MODULES([GNOMEDESKTOP3], [gnome-desktop-3.0],
+		  [have_gnomedesktop3=yes], [have_gnomdesktop3=no])
 
 PKG_CHECK_MODULES([GLIB], [glib-2.0 gobject-2.0], [have_glib=yes], [have_glib=no])
 PKG_CHECK_MODULES([GEOCLUE2], [glib-2.0 gio-2.0 >= 2.26], [have_geoclue2=yes], [have_geoclue2=no])
@@ -224,6 +226,30 @@ AS_IF([test "x$enable_wingdi" != xno], [
 ])
 AM_CONDITIONAL([ENABLE_WINGDI], [test "x$enable_wingdi" = xyes])
 
+# Check GNOMERR method
+AC_MSG_CHECKING([whether to enable GNOMERR method])
+AC_ARG_ENABLE([gnomerr], [AC_HELP_STRING([--enable-gnomerr],
+	[enable GNOMERR method])],
+	[enable_gnomerr=$enableval],[enable_gnomerr=maybe])
+AS_IF([test "x$enable_gnomerr" != xno], [
+	AS_IF([test "x$have_glib" = "xyes" -a "x$have_gnomedesktop3" = "xyes"], [
+		AC_DEFINE([ENABLE_GNOMERR], 1,
+			[Define to 1 to enable GNOMERR method])
+		AC_MSG_RESULT([yes])
+		enable_gnomerr=yes
+	], [
+		AC_MSG_RESULT([missing dependencies])
+		AS_IF([test "x$enable_gnomerr" = xyes], [
+			AC_MSG_ERROR([missing dependencies for GNOMERR method])
+		])
+		enable_gnomerr=no
+	])
+], [
+	AC_MSG_RESULT([no])
+	enable_gnomerr=no
+])
+AM_CONDITIONAL([ENABLE_GNOMERR], [test "x$enable_gnomerr" = xyes])
+
 
 # Check Geoclue2 location provider
 AC_MSG_CHECKING([whether to enable Geoclue2 location provider])
@@ -380,6 +406,7 @@ echo "
     VidMode:		${enable_vidmode}
     Quartz (macOS):	${enable_quartz}
     WinGDI (Windows):	${enable_wingdi}
+    GNOMERR:		${enable_gnomerr}
 
     Location providers:
     Geoclue2:			${enable_geoclue2}
