@@ -86,6 +86,10 @@ int poll(struct pollfd *fds, int nfds, int timeout) { abort(); return -1; }
 # include "gamma-vidmode.h"
 #endif
 
+#ifdef ENABLE_GNOMERR
+# include "gamma-gnomerr.h"
+#endif
+
 #ifdef ENABLE_QUARTZ
 # include "gamma-quartz.h"
 #endif
@@ -107,7 +111,6 @@ int poll(struct pollfd *fds, int nfds, int timeout) { abort(); return -1; }
 
 #undef CLAMP
 #define CLAMP(lo,mid,up)  (((lo) > (mid)) ? (lo) : (((mid) < (up)) ? (mid) : (up)))
-
 
 /* Bounds for parameters. */
 #define MIN_LAT   -90.0
@@ -916,6 +919,9 @@ main(int argc, char *argv[])
 #endif
 #ifdef ENABLE_WINGDI
 		w32gdi_gamma_method,
+#endif
+#ifdef ENABLE_GNOMERR
+		gnomerr_gamma_method,
 #endif
 		dummy_gamma_method,
 		{ NULL }
